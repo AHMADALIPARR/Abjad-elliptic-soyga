@@ -1,0 +1,6 @@
+SPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: 2026 The algorithm-cores project contributors
+
+originals/MANIFEST.sha256 is a checksum list in sha256sum format.
+A comment line would make `sha256sum -c` reject or skip entries, so there is no inline header.
+The listed files are unmodified archive members. This checksum file does not relicense them.

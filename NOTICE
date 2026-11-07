@@ -1,0 +1,36 @@
+<!-- SPDX-License-Identifier: AGPL-3.0-only -->
+<!-- SPDX-FileCopyrightText: 2026 The algorithm-cores project contributors -->
+
+# Third-party notices
+
+Project-owned source in this tree is under AGPL-3.0-only. See `LICENSE` for the verbatim GNU Affero General Public License, Version 3, 19 November 2007, Copyright (C) 2007 Free Software Foundation, Inc. That license text is included unchanged. It is not a work of this project.
+
+These tools and libraries are used but not vendored, and this project does not relicense them.
+
+## Julia
+
+The Julia language and its standard libraries, including Printf, Sockets, Test, and Pkg as recorded in `julia/Manifest.toml`, are under the MIT License, Copyright (c) 2009-2023 Jeff Bezanson, Stefan Karpinski, Viral B. Shah, and other contributors. `julia/Manifest.toml` is a generated lockfile. It does not change those licenses.
+
+## PCRE2
+
+Regex matching calls the system library `libpcre2-8`. PCRE2 is Copyright 1997-2022 University of Cambridge and is distributed under the BSD 3-Clause License with the binary library-like packages exemption. The sources of PCRE2 are not in this tree.
+
+## CBQN
+
+BQN programs are run with CBQN, which is not included here. CBQN is Copyright (C) 2021-2025 dzaima and contributors. Most of CBQN may be used under any of LGPLv3-only, GPLv3-only, or MPL-2.0. Its timsort is MIT. Its Ryu sources are Apache-2.0 or Boost-1.0. Optional REPLXX has its own license. None of those terms are changed by this project.
+
+## Agda
+
+Agda 2.6.3 is an external checker, not included here. The Agda compiler sources used by the Debian package are under the MIT License, Copyright 2005-2011 Ulf Norell, Catarina Coquand, Makoto Takeyama, Nils Anders Danielsson, Andreas Abel, Karl Mehltretter, and Marcin Benke, with a separate GHC-derived file noted in that package's copyright file.
+
+## GCC
+
+The C compiler is an external toolchain. GCC is not included and is not relicensed.
+
+## Wolfram
+
+Wolfram Language, Wolfram Engine, and WSTP are proprietary. They are not included, not linked, and not validated by this tree. The `.wl` and `.wls` files shipped here are project source under AGPL-3.0-only. They are not a grant of any Wolfram product license.
+
+## Starter archives
+
+`originals/` and `uploads/` keep the starter bytes. Those archives contained no license. They are not edited to apply AGPL. The working-tree files derived from them are the files this project licenses under AGPL-3.0-only. See `docs/FILE_AUDIT.md`.

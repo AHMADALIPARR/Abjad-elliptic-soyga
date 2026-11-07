@@ -1,0 +1,8 @@
+SPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: 2026 The algorithm-cores project contributors
+
+This directory is a provenance record.
+The archive members listed in MANIFEST.sha256 are unmodified.
+They arrived with no license file. This note does not relicense them and does not add an SPDX header to those bytes.
+EXTRACTION.md describes the safe unzip. It is project text and may carry its own header if edited later; as of this note it is the extraction write-up, not an archive member.
+Working-tree files outside this directory that were derived from these bytes are licensed AGPL-3.0-only. See docs/FILE_AUDIT.md and LICENSE.

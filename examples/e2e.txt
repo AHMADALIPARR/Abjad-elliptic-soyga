@@ -1,0 +1,25 @@
+date: 2026-11-07T21:02:53Z
+-- bqn demo --
+"3x3 torsion magic square"
+┌─                         
+╵ ⟨ 0 0 ⟩ ⟨ 1 1 ⟩ ⟨ 2 2 ⟩  
+  ⟨ 1 2 ⟩ ⟨ 2 0 ⟩ ⟨ 0 1 ⟩  
+  ⟨ 2 1 ⟩ ⟨ 0 2 ⟩ ⟨ 1 0 ⟩  
+                          ┘
+"Identity sums and nine unique points"
+1
+"Reflection of (3,6) on y²=x³+2x+3 over F97"
+⟨ 3 91 ⟩
+"Recursive chord traversal (fifth step reaches O)"
+┌─                                                        
+· "infinity" ⟨ ⟨ 3 6 ⟩ ⟨ 80 10 ⟩ ⟨ 80 87 ⟩ ⟨ 3 91 ⟩ ⟨⟩ ⟩  
+                                                         ┘
+"3-torsion embedded in abstract 27-torsion"
+⟨ 27 ⟨ 9 9 ⟩ ⟩
+-- abjad local rpc --
+66
+92
+-- soyga first row --
+ndizbdizbdizbdizbdizbdizbdizbdizbdiz
+-- neuro dispatch --
+{"distinct":true,"lineSums":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"valid":true}

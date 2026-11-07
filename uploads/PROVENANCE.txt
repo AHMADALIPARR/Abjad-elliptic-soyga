@@ -1,0 +1,6 @@
+SPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: 2026 The algorithm-cores project contributors
+
+These zip archives are the unmodified uploads.
+They are not opened for editing, not relicensed, and not given inline headers.
+Extraction notes and checksums are in originals/.

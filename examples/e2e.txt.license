@@ -1,0 +1,6 @@
+SPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: 2026 The algorithm-cores project contributors
+
+examples/e2e.txt is recorded command output from scripts/examples.sh.
+An inline header would change that record.
+The script that produced it is AGPL-3.0-only.
