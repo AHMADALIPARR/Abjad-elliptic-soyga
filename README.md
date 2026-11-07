@@ -6,91 +6,77 @@
 [![License: AGPL-3.0-only](https://img.shields.io/badge/license-AGPL--3.0--only-blue.svg)](LICENSE)
 [![CI](https://github.com/AHMADALIPARR/Abjad-elliptic-soyga/actions/workflows/ci.yml/badge.svg)](https://github.com/AHMADALIPARR/Abjad-elliptic-soyga/actions/workflows/ci.yml)
 
-Elliptic curves, Eastern abjad totals, the Soyga recurrence, and the Dee Mirror square. Four numerical programs, each left in the language it was started in, plus a Julia stand-in where a proprietary Wolfram kernel is required and not available.
+Exact arithmetic for an Eastern abjad, a Soyga table, a finite-field curve, and two different group-valued squares. Each piece stays in the language it started in. Julia stands in where a Wolfram kernel is required and is not available.
 
-## Repository
+<p align="center">
+  <img src="docs/hero-magic-square.svg" alt="Dark holographic plate of the 3 by 3 torsion square. Cells read (0,0) (1,1) (2,2), (1,0) (2,1) (0,2), (2,0) (0,1) (1,2). Margin marks show each row and column sums to (0,0)." width="720">
+</p>
+
+The plate is a drawing of `magic_z3`, the same square `MagicTorsionSquare` describes: `M(i, j) = (i + j, j)` in `(Z/3Z)^2`. All nine cells are distinct. Every row, column, and both diagonals sum to `(0, 0)`. Julia `magic_certificate` returned `true` for this square on 2026-11-07. The SVG is hand-drawn. The programs print the cells and the certificate. They do not paint this picture.
+
+That square is not the BQN square, and it is not the Lo Shu square of integers 1 through 9.
+
+| Square | Where it lives | Line sum |
+| --- | --- | --- |
+| `M(i, j) = (i + j, j)` | Julia `magic_z3`, Wolfram `MagicTorsionSquare`, the plate above | `(0, 0)` in `(Z/3Z)^2` |
+| `G(r, c) = (c + r, c + 2r)` for odd `n` | BQN `Magic` | `(0, 0)` in `(Z/nZ)^2` |
+| Lo Shu `8 1 6 / 3 5 7 / 4 9 2` | Accepted by `square_sums` as a test vector | `15` on every line |
+
+`square_of_squares` returns false for the Lo Shu square. The repository checks a candidate. It does not search for a 3×3 magic square of distinct positive squares.
+
+## What you can run
 
 ```sh
 git clone https://github.com/AHMADALIPARR/Abjad-elliptic-soyga.git
 cd Abjad-elliptic-soyga
 ```
 
-The review branch for this source import is [`cursor/import-algorithm-sources-8bd2`](https://github.com/AHMADALIPARR/Abjad-elliptic-soyga/tree/cursor/import-algorithm-sources-8bd2). The review pull request is https://github.com/AHMADALIPARR/Abjad-elliptic-soyga/pull/1 .
-
-The CI badge above reads the workflow on the default branch. It is a link to the Actions runs. It is not, by itself, a statement that a hosted run has passed. The pull request checks are the run for this branch. Wolfram Language and WSTP are not part of that workflow.
-
-The tree was imported from the completed source archive of private development commit `a9118ffda6fec90e8c4eb2c824f87e6b3254bf78`. `originals/MANIFEST.sha256` still checks the unmodified starter members. `LICENSE` is the verbatim GNU AGPL version 3 already on this repository, not a reformatted copy.
-
-| Piece | Language | Role |
+| Tool | Used for | Recorded version |
 | --- | --- | --- |
-| `abjad-wstp` | C, Wolfram source | Eastern abjad totals over a local Unix socket |
-| `elliptic-neuroregex` | C, Wolfram source | Group-valued 3×3 square, integral curve points, lexical search |
-| `mirror-bqn` | BQN | Odd-order torsion square and the finite-field group law |
-| `soyga-agda` | Agda | Machine-checked Soyga recurrence |
-| `julia` | Julia | Second implementations, both socket servers, tests |
+| GCC | C daemons and native tests | 13.3.0, `-std=c11 -Wall -Wextra -Werror` |
+| [CBQN](https://github.com/dzaima/CBQN) | `mirror-bqn` | commit `588753c`, `make REPLXX=0` |
+| Agda | `soyga-agda/Soyga.agda` | 2.6.3, `--safe --without-K` |
+| Julia | package `Algorithms` | 1.11.6, standard libraries only |
+| Wolfram / WSTP | `*.wl`, `wolfram.c`, `wstp_daemon.c` | not installed here |
 
-The license for project-owned source is **AGPL-3.0-only** (GNU Affero General Public License version 3 only, not “or any later version”). The verbatim text is [`LICENSE`](LICENSE). Copyright 2007 of that license document is the Free Software Foundation’s. Third-party tools are not relicensed; see [`NOTICE`](NOTICE) and [`docs/FILE_AUDIT.md`](docs/FILE_AUDIT.md).
+Nothing in the default build listens on TCP. Sockets are `AF_UNIX` with mode `0600`.
 
-`originals/` and `uploads/` are the starter bytes. They had no license. They are not edited to apply this one.
-
-## Architecture
-
-```mermaid
-flowchart LR
-  subgraph local [Local user only]
-    CAbjad[abjad-client]
-    CRpc[rpc-client]
-    JAbjad[julia abjad daemon]
-    JNeuro[julia neuro daemon]
-    CDaemon[abjad-daemon local]
-  end
-  CAbjad -->|AF_UNIX 0600| CDaemon
-  CAbjad -->|same framing| JAbjad
-  CRpc -->|AF_UNIX 0600| JNeuro
-  CDaemon --> AbjadC[abjad.c exact sum]
-  JAbjad --> AbjadJ[Julia abjad_sum]
-  JNeuro --> Neuro[Julia Dispatch allowlist]
-  Wstp[WSTP daemons] -.->|SDK absent, not built| Kernel[Wolfram kernel]
-```
-
-Nothing in the default build listens on TCP. Clients cannot send Wolfram source or a shell command. The WSTP C files remain in the tree and are not linked here.
-
-Two magic squares are implemented and they are not the same square:
-
-- NeuroRegex / Julia `magic_z3`: `M(i,j) = (i+j, j)` in `(Z/3Z)^2`.
-- BQN `Magic`: `G(r,c) = (c+r, c+2r) mod n` for odd `n`.
-
-Abjad, Soyga, both squares, and the elliptic group law are exact. NeuroRegex scores use binary64 weights `0.35` and `0.12`. Integral points are exhaustive only inside a stated bound.
-
-## Setup
-
-The timings in `benchmarks/` were measured on 2026-11-07 and are stored as the command output from that run. `benchmarks/environment.txt` records the host. Later clones do not rewrite those files. A fresh `./scripts/test-all.sh` checks correctness again. It does not replace the stored samples.
-
-Recorded toolchain, from `benchmarks/environment.txt` (2026-11-07):
-
-| Tool | Version used |
-| --- | --- |
-| GCC | 13.3.0, `-std=c11 -Wall -Wextra -Werror` |
-| Julia | 1.11.6 |
-| Agda | 2.6.3 |
-| CBQN | built from commit `588753c` with `make REPLXX=0` |
-| OS | Linux 6.12.113, 4× Intel Xeon |
-
-`wolframscript` and `WolframKernel` were not installed. Do not read a passing test as a Wolfram run.
-
-### C
+### Abjad
 
 ```sh
 make -C abjad-wstp
-make -C abjad-wstp test
-make -C elliptic-neuroregex test-native
+./abjad-wstp/abjad-daemon local /tmp/abjad.sock &
+./abjad-wstp/abjad-client /tmp/abjad.sock 'الله'
 ```
 
-`make -C abjad-wstp wstp` and `make -C elliptic-neuroregex wstp-daemon` stop until you pass a real WSTP SDK. This tree does not.
+That client command printed `66`. `محمد` printed `92`. The same totals are in `examples/e2e.txt`, along with `أحمد` = 53 and `علي` = 110. The 28 letters `ابجد هوز حطي كلمن سعفص قرشت ثخذ ضظغ` total 5995. `أ إ آ ٱ` count as alif, `ى` as ya, `ة` as ha. Hamza, tatweel, and harakat add nothing. A string with no valued letter is rejected. Broken UTF-8 is rejected.
+
+`make -C abjad-wstp test` builds the local daemon and runs `tests/smoke.sh` plus `tests/suite`. On the import re-run the suite printed `abjad suite checks=924 failures=0`.
+
+`make -C abjad-wstp wstp` stops until you pass `WSTP_INCLUDE` and `WSTP_LIBDIR`. This tree does not.
+
+### The torsion square, curves, and search
+
+```sh
+make -C elliptic-neuroregex test-native
+julia --project=julia --startup-file=no -e 'using Algorithms; println(magic_z3()); println(magic_certificate(magic_z3()))'
+```
+
+`test-native` prints the original group-square PASS line and `elliptic native checks=26 failures=0`. The Julia one-liner prints the nine cells and `true`.
+
+The C client speaks to the Julia neuro daemon, which implements the allowlist in `julia/src/neuro.jl`:
+
+```sh
+make -C elliptic-neuroregex rpc-client
+julia --project=julia --startup-file=no julia/bin/neuro_daemon.jl /tmp/neuro.sock &
+./elliptic-neuroregex/rpc-client /tmp/neuro.sock magic '{}'
+```
+
+A recorded dispatch returned `{"valid":true,"distinct":true}` and eight line sums `(0, 0)`. That was Julia, not Wolfram. `make wstp-daemon` and `make wl-test` need a Wolfram SDK and `wolframscript`. Both were absent. `tests/test.wls` was not executed.
+
+Integral points are exhaustive only inside a stated bound. For `y² = x³ + 1` with bound 4 they are `(-1, 0)`, `(0, ±1)`, `(2, ±3)`. Over `F_5`, `2·(0, 1) = (0, 4)` and `3·(0, 1) = O`. Over `F_97`, `y² = x³ + 2x + 3`, repeated addition of `(3, 6)` is `(3, 6), (80, 10), (80, 87), (3, 91), O`.
 
 ### BQN
-
-Install [CBQN](https://github.com/dzaima/CBQN) as `bqn` (`make REPLXX=0` if you have no C++ standard library headers). Then:
 
 ```sh
 bqn mirror-bqn/test.bqn
@@ -98,135 +84,82 @@ bqn mirror-bqn/test_more.bqn
 bqn mirror-bqn/demo.bqn
 ```
 
-### Agda
+`test.bqn` prints `All Dee Mirror BQN assertions passed` (11 assertions). `test_more.bqn` prints `BQN extended tests passed: 40`. `demo.bqn` prints the odd-order square for `n = 3`, which is `G`, not the plate above:
+
+```text
+⟨ 0 0 ⟩ ⟨ 1 1 ⟩ ⟨ 2 2 ⟩
+⟨ 1 2 ⟩ ⟨ 2 0 ⟩ ⟨ 0 1 ⟩
+⟨ 2 1 ⟩ ⟨ 0 2 ⟩ ⟨ 1 0 ⟩
+```
+
+The same demo run shows `(3, 6)` reflected to `(3, 91)` on the `F_97` curve, and the fifth addition reaching `O`.
+
+### Soyga
 
 ```sh
 cd soyga-agda && agda --safe --without-K Soyga.agda
+julia --project=julia --startup-file=no -e 'using Algorithms; println(String(soyga_table("nisram")[1]))'
 ```
 
-Run it from `soyga-agda/` so the module name matches the file. No standard library is required. The file sets `--safe` and `--without-K`. It has no postulates and no termination pragma.
+Agda checks the recurrence. The file sets `--safe` and `--without-K`. It has no postulates and no termination pragma. A successful run prints `Checking Soyga` and exits 0. That is the only machine-checked proof in the tree, and it is about the Soyga step, not about elliptic curves.
 
-### Julia
-
-```sh
-julia --project=julia --startup-file=no -e 'using Pkg; Pkg.test("Algorithms")'
-julia --project=julia --startup-file=no julia/bin/abjad_daemon.jl /tmp/abjad.sock
-julia --project=julia --startup-file=no julia/bin/neuro_daemon.jl /tmp/neuro.sock
-```
-
-Dependencies in `julia/Project.toml` are Julia standard libraries only (Printf, Sockets). Test uses the Test standard library. No third-party Julia package is vendored.
-
-### Everything
-
-```sh
-./scripts/test-all.sh
-./scripts/examples.sh
-```
-
-`scripts/examples.sh` rewrites `examples/e2e.txt`. The copy in the repository is the transcript from the recorded run.
-
-### CI
-
-[`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs, on GitHub-hosted Ubuntu:
-
-- `make -C abjad-wstp test` and `make -C elliptic-neuroregex test-native`, with GCC
-- the two `make wstp` targets, which must exit because no WSTP SDK is configured
-- CBQN built from commit `588753c` with `make REPLXX=0`, then `mirror-bqn/test.bqn` and `mirror-bqn/test_more.bqn`
-- `agda --safe --without-K Soyga.agda` using the distribution Agda package
-- Julia 1.11.6 from the upstream tarball. That job builds `abjad-daemon`, `abjad-client`, and `rpc-client` first, because the RPC tests spawn those binaries, then runs `Pkg.test("Algorithms")`.
-
-The workflow is shell and the existing Make files. It does not install Python and it does not add another implementation language. It does not run `wolframscript` or `tests/test.wls`. Hosted success is whatever the Actions page shows for a given commit. This README does not substitute for that page.
-
-The first hosted run, on `d88616a8b1310a72bc93b7626183c3721edc20de`, finished with the C, BQN, and Agda jobs successful. The Julia job failed: `Pkg.test` could not spawn `abjad-client` because that job had not compiled it. The workflow step above is the correction. A later run has to be read from Actions before it is called successful.
-
-## Examples that were run
-
-Abjad, Eastern kabir, from `examples/e2e.txt`:
-
-| Input | Total |
-| --- | --- |
-| `الله` | 66 |
-| `محمد` | 92 |
-| `أحمد` | 53 |
-| `علي` | 110 |
-| the 28 abjad letters | 5995 |
-
-`أ إ آ ٱ` count as alif. `ى` counts as ya. `ة` counts as ha. Hamza, tatweel, and harakat add nothing. A string with no valued letter is rejected. Broken UTF-8 is rejected.
-
-Soyga, seed `nisram`, first row from the same example file:
+The Julia call prints the NISRAM first row:
 
 ```text
 ndizbdizbdizbdizbdizbdizbdizbdizbdiz
 ```
 
-BQN, curve `y² = x³ + 2x + 3` over `F_97`, repeated addition of `(3,6)`:
+Julia recomputes tables. It is not a proof. NISRAM letter counts from this recurrence are B 72, R 70, Y 70. MARSIN counts are I 82, T 72, Y 67.
 
-```text
-(3,6), (80,10), (80,87), (3,91), O
+### The whole suite
+
+```sh
+./scripts/test-all.sh
 ```
 
-`5·(3,6) = O`. Over `F_5`, `y² = x³ + 1`, `2·(0,1) = (0,4)` and `3·(0,1) = O`. Integral points of `y² = x³ + 1` with bound 4 are `(-1,0)`, `(0,±1)`, `(2,±3)`.
+`scripts/examples.sh` rewrites `examples/e2e.txt`. The copy in the repository is the transcript from the recorded run on 2026-11-07.
 
-NeuroRegex magic dispatch returned `{"valid":true,"distinct":true}` with eight line sums `(0,0)`. That was the Julia dispatcher, not Wolfram.
+## Checks, timings, and what they are not
 
-## What Julia replaces
+`./scripts/test-all.sh` exited 0 on the import machine (GCC 13.3.0, Julia 1.11.6, Agda 2.6.3, CBQN `588753c8`). The log is `benchmarks/verification.txt`.
 
-Julia does not replace BQN, Agda, or the C abjad decoder. It provides:
-
-- a second abjad decoder, checked against the C totals and callable as a Unix-socket daemon the C client already speaks
-- the elliptic group law, integral-point search, and NeuroRegex index, which otherwise live only in `NeuroRegex.wl`
-- a Unix-socket server for the C `rpc-client`
-- the property tests and the benchmark driver
-
-`wolfram.c` and `wstp_daemon.c` are still the WSTP integrations. They were not compiled against WSTP and were not run against a kernel.
-
-## Tests and timings
-
-The stored log is `benchmarks/verification.txt`, from `./scripts/test-all.sh` on 2026-11-07, exit 0. That file is the record of the run that produced the benchmark samples. It was not rewritten during the GitHub import.
-
-The same command was run again on this import, on 2026-11-07, and exited 0. Observed tools: GCC 13.3.0, Julia 1.11.6, Agda 2.6.3 (`2.6.3-1build1`), CBQN commit `588753c8`. Observed results: smoke PASS and `abjad suite checks=924 failures=0`; the original group-square PASS line and `elliptic native checks=26 failures=0`; `bqn mirror-bqn/test.bqn` printed `All Dee Mirror BQN assertions passed`; `bqn mirror-bqn/test_more.bqn` printed `BQN extended tests passed: 40`; `agda --safe --without-K Soyga.agda` printed `Checking Soyga` and exited 0; `Pkg.test("Algorithms")` passed 842 tests (JSON 9, Abjad 421, elliptic 324, Soyga 45, NeuroRegex 33, RPC 10). `wolframscript` and `WolframKernel` were not on `PATH`. `make -C abjad-wstp wstp` and `make -C elliptic-neuroregex wstp-daemon` both stopped and asked for WSTP paths. The line `RPC error: 1` in the Julia log is the C client rejecting a bad input inside a test that expects that rejection.
-
-| Check | Printed result |
+| Check | Result |
 | --- | --- |
-| `make -C abjad-wstp test` | smoke PASS; `abjad suite checks=924 failures=0` |
-| `make -C elliptic-neuroregex test-native` | original group-square PASS; `elliptic native checks=26 failures=0` |
-| `bqn mirror-bqn/test.bqn` | 11 assertions passed |
-| `bqn mirror-bqn/test_more.bqn` | `BQN extended tests passed: 40` |
-| `agda --safe --without-K Soyga.agda` | exit 0, `Checking Soyga` |
+| Abjad smoke and `tests/suite` | PASS; `checks=924 failures=0` |
+| Elliptic native | PASS; `checks=26 failures=0` |
+| BQN `test.bqn` / `test_more.bqn` | 11 assertions; `BQN extended tests passed: 40` |
+| Agda `--safe --without-K` | `Checking Soyga`, exit 0 |
 | `Pkg.test("Algorithms")` | 842 passed: JSON 9, Abjad 421, elliptic 324, Soyga 45, NeuroRegex 33, RPC 10 |
 
-The Julia elliptic set includes commutativity, inverses, and associativity for every triple of the six points of `y² = x³ + 1` over `F_5`, including the point at infinity. That is a finite check, not a general theorem. The Agda file is the only machine-checked proof, and it is about the Soyga step, not about elliptic curves.
+The Julia elliptic set checks commutativity, inverses, and associativity for every triple among the six points of `y² = x³ + 1` over `F_5`, including the point at infinity. That is a finite check of one curve. It is not a theorem about every elliptic curve.
 
-Timings in `benchmarks/`, host as in `benchmarks/environment.txt`, UTC 2026-11-07T21:02:42Z:
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs those four suites on GitHub-hosted Ubuntu. The Julia job builds `abjad-daemon`, `abjad-client`, and `rpc-client` first, because the RPC tests spawn those gitignored binaries. The workflow does not run Wolfram. The badge reads the default branch. A green badge means that branch's latest run succeeded. It does not certify a Wolfram kernel.
 
-- C `abjad_sum`, 200 repetitions, 4096 bytes of alif: min 8229 ns, mean 11181.8 ns, max 26737 ns (`benchmarks/abjad-c-raw.txt`).
-- Julia samples, including 30 repetitions of an 8000-letter abjad sum (about 27–38 µs), are the raw lines in `benchmarks/julia-raw.txt`.
-- BQN `•MonoTime`, 20 repetitions of `VerifyMagic 9` and one scalar multiplication (`benchmarks/bqn-raw.txt`). Those durations sit on the timer floor (about 3e-8 to 2e-7 s). They show the calls return; they are not a throughput claim.
+Timings in `benchmarks/` were measured at 2026-11-07T21:02:42Z on the host in `benchmarks/environment.txt`. Later clones do not rewrite those files.
 
-`examples/e2e.txt` is the end-to-end transcript.
+- C `abjad_sum`, 200 repetitions of 4096 alif bytes: min 8229 ns, mean 11181.8 ns, max 26737 ns (`benchmarks/abjad-c-raw.txt`).
+- Julia samples, including 30 repetitions of an 8000-letter abjad sum (about 27–38 µs), are the lines in `benchmarks/julia-raw.txt`.
+- BQN `•MonoTime`, 20 repetitions of `VerifyMagic 9` and one scalar multiplication (`benchmarks/bqn-raw.txt`). Those durations sit on the timer floor (about 3e-8 to 2e-7 s). They show the calls return. They are not a throughput claim.
+
+## License
+
+Project-owned source is **AGPL-3.0-only**: GNU Affero General Public License version 3 only. The verbatim license is [`LICENSE`](LICENSE). Copyright 2007 on that document is the Free Software Foundation’s. Third-party tools are not relicensed. Read [`NOTICE`](NOTICE) and [`docs/FILE_AUDIT.md`](docs/FILE_AUDIT.md).
+
+`originals/` and `uploads/` are the starter bytes. They arrived with no license and are not edited to apply this one. `originals/MANIFEST.sha256` checks those members.
 
 ## Limits
 
-- No Wolfram validation. `tests/test.wls` was not executed.
-- Sockets are filesystem Unix sockets, mode `0600`, one client at a time, 5 s default timeout, Abjad payload ≤ 65536 bytes, NeuroRegex payload ≤ 1 MiB. There is no authentication beyond the file mode and no TCP listener.
-- Regex uses PCRE2 with match limit 100000 and depth limit 10000, not Wolfram `TimeConstrained`. A pattern that fails those limits does not match.
-- BQN `CurvePoints` allows primes up to 256. `Trace` fuel is at most 1024. `Magic` allows odd `n` from 1 to 401.
+- Wolfram Language and WSTP were not run. `wolfram.c` and `wstp_daemon.c` still need the proprietary SDK.
+- Julia does not replace the C abjad decoder, BQN, or the Agda proof. It is a second abjad, the curve and search code that otherwise live in `NeuroRegex.wl`, and the socket server the C `rpc-client` can call.
+- Regex in Julia uses PCRE2 with match limit 100000 and depth limit 10000. That is not Wolfram `TimeConstrained`.
+- BQN `Magic` allows odd `n` from 1 to 401. `CurvePoints` allows primes up to 256. `Trace` fuel is at most 1024.
 - The C curve helper is int64 and returns an error on overflow. Julia uses `BigInt`.
-- NISRAM letter counts from the recurrence are B 72, R 70, Y 70. MARSIN counts are I 82, T 72, Y 67. The fourth-row cycle is `qsrnplfdfzly`. A secondary transcription says `qsrnylfdfzly`. Rows 11, 22, and 33 are not all L. Those two secondary claims are not asserted.
-- `SquareOfSquaresQ` only rejects or accepts a candidate. It does not produce a 3×3 magic square of distinct positive squares.
 - This is not a cryptographic primitive and not a certification.
 
-## Layout
+## Map
 
-```text
-LICENSE                  AGPL-3.0 verbatim
-NOTICE                   third-party notices
-docs/ALGORITHMS.md       definitions and vectors
-docs/SECURITY.md         socket and resource limits
-docs/FILE_AUDIT.md       every file, license class
-docs/STUB_LEDGER.md      starter gap to code or blocker
-originals/               unmodified starter members plus checksums
-uploads/                 the four zip archives
-```
-
-File-by-file classes and the exceptions to inline SPDX headers are in [`docs/FILE_AUDIT.md`](docs/FILE_AUDIT.md).
+- [`docs/ALGORITHMS.md`](docs/ALGORITHMS.md) — definitions and known vectors
+- [`docs/SECURITY.md`](docs/SECURITY.md) — socket and resource limits
+- [`docs/FILE_AUDIT.md`](docs/FILE_AUDIT.md) — license class of every file
+- [`docs/STUB_LEDGER.md`](docs/STUB_LEDGER.md) — what the starters left unfinished
+- [`abjad-wstp/README.md`](abjad-wstp/README.md), [`elliptic-neuroregex/README.md`](elliptic-neuroregex/README.md), [`mirror-bqn/README.md`](mirror-bqn/README.md), [`soyga-agda/README.md`](soyga-agda/README.md)
