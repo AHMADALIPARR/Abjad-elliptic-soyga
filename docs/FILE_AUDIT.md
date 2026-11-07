@@ -48,6 +48,7 @@ The archive contained no nested `.git`, no object files, no caches, and no secre
 | `benchmarks/verification.txt` | Recorded command output. Inline header omitted so the record stays the record. |
 | `dist/algorithms-source.zip` | Built source archive. Regenerated after license headers. Not a source file. |
 | `docs/ALGORITHMS.md` | Project-owned. Inline SPDX-License-Identifier: AGPL-3.0-only. |
+| `docs/hero-magic-square.svg` | Project-owned illustration. SPDX-License-Identifier: AGPL-3.0-only in an XML comment. Cells are the `magic_z3` square. The drawing is hand-made; the programs do not emit this file. |
 | `docs/SECURITY.md` | Project-owned. Inline SPDX-License-Identifier: AGPL-3.0-only. |
 | `docs/STUB_LEDGER.md` | Project-owned. Inline SPDX-License-Identifier: AGPL-3.0-only. |
 | `elliptic-neuroregex/Makefile` | Project-owned. Inline SPDX-License-Identifier: AGPL-3.0-only. |
