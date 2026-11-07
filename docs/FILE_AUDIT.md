@@ -19,7 +19,7 @@ The archive contained no nested `.git`, no object files, no caches, and no secre
 
 | Path | Class |
 | --- | --- |
-| `.github/workflows/ci.yml` | Project-owned. Inline SPDX-License-Identifier: AGPL-3.0-only. GitHub Actions workflow for the C, BQN, Agda, and Julia suites. It does not run Wolfram. |
+| `.github/workflows/ci.yml` | Project-owned. Inline SPDX-License-Identifier: AGPL-3.0-only. GitHub Actions workflow for the C, BQN, Agda, and Julia suites. The Julia job builds `abjad-daemon`, `abjad-client`, and `rpc-client` before `Pkg.test`, because those binaries are gitignored and the RPC tests spawn them. It does not run Wolfram. |
 | `.gitignore` | Project-owned. Inline SPDX-License-Identifier: AGPL-3.0-only. |
 | `LICENSE` | FSF verbatim AGPL-3.0 text kept from the repository's initial commit. Not project copyright. No extra SPDX banner. The archive's reflowed copy was not committed over it. |
 | `NOTICE` | Project-owned. Inline SPDX-License-Identifier: AGPL-3.0-only. |

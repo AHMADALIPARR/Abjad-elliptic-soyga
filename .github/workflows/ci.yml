@@ -80,6 +80,14 @@ jobs:
           julia --version
           sudo apt-get update
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y libpcre2-8-0
+      - name: Build the C clients the RPC tests spawn
+        run: |
+          set -eu
+          make -C abjad-wstp abjad-daemon abjad-client
+          make -C elliptic-neuroregex rpc-client
+          test -x abjad-wstp/abjad-daemon
+          test -x abjad-wstp/abjad-client
+          test -x elliptic-neuroregex/rpc-client
       - name: Package tests
         run: |
           set -eu

@@ -133,9 +133,11 @@ Dependencies in `julia/Project.toml` are Julia standard libraries only (Printf, 
 - the two `make wstp` targets, which must exit because no WSTP SDK is configured
 - CBQN built from commit `588753c` with `make REPLXX=0`, then `mirror-bqn/test.bqn` and `mirror-bqn/test_more.bqn`
 - `agda --safe --without-K Soyga.agda` using the distribution Agda package
-- Julia 1.11.6 from the upstream tarball, then `Pkg.test("Algorithms")`
+- Julia 1.11.6 from the upstream tarball. That job builds `abjad-daemon`, `abjad-client`, and `rpc-client` first, because the RPC tests spawn those binaries, then runs `Pkg.test("Algorithms")`.
 
 The workflow is shell and the existing Make files. It does not install Python and it does not add another implementation language. It does not run `wolframscript` or `tests/test.wls`. Hosted success is whatever the Actions page shows for a given commit. This README does not substitute for that page.
+
+The first hosted run, on `d88616a8b1310a72bc93b7626183c3721edc20de`, finished with the C, BQN, and Agda jobs successful. The Julia job failed: `Pkg.test` could not spawn `abjad-client` because that job had not compiled it. The workflow step above is the correction. A later run has to be read from Actions before it is called successful.
 
 ## Examples that were run
 
