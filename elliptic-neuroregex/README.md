@@ -7,4 +7,8 @@ BQN is the centerpiece. The torsion magic square is certified.
 
 All lines sum to (0,0).
 
+## Magic Square Visualization
+
+![Elliptic 3-Torsion Magic Square](magic_square.png)
+
 Production draft with tables and badges.
