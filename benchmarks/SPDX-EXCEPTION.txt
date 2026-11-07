@@ -1,0 +1,15 @@
+SPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: 2026 The algorithm-cores project contributors
+
+The files in this directory are recorded command output.
+An inline header would change the evidence, so none is inserted.
+
+Covered files:
+- environment.txt
+- verification.txt
+- abjad-c-raw.txt
+- bqn-raw.txt
+- julia-raw.txt
+
+The programs that produced them are AGPL-3.0-only.
+These logs are not a certification and not a Wolfram run.

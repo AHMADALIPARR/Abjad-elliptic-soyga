@@ -1,0 +1,7 @@
+SPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: 2026 The algorithm-cores project contributors
+
+Sidecar for mirror-bqn/README.original.md.
+That file is byte-identical to originals/README.md, the starter's Dee Mirror README.
+An inline header is not inserted, so the starter text stays comparable with cmp.
+The current project README for this component is mirror-bqn/README.md, which carries an inline header.

@@ -1,0 +1,94 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# SPDX-FileCopyrightText: 2026 The algorithm-cores project contributors
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  c-suites:
+    name: C suites
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Abjad and elliptic native tests
+        run: |
+          set -eu
+          make -C abjad-wstp test
+          make -C elliptic-neuroregex test-native
+      - name: WSTP targets fail closed without an SDK
+        run: |
+          set -eu
+          if make -C abjad-wstp wstp; then
+            echo "wstp target succeeded without WSTP_INCLUDE" >&2
+            exit 1
+          fi
+          if make -C elliptic-neuroregex wstp-daemon; then
+            echo "wstp-daemon succeeded without WSTP_INCLUDE" >&2
+            exit 1
+          fi
+
+  bqn:
+    name: BQN
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build CBQN 588753c
+        run: |
+          set -eu
+          git clone https://github.com/dzaima/CBQN.git "$RUNNER_TEMP/CBQN"
+          git -C "$RUNNER_TEMP/CBQN" checkout --detach 588753c
+          make -C "$RUNNER_TEMP/CBQN" -j"$(nproc)" REPLXX=0
+          sudo ln -sfn "$RUNNER_TEMP/CBQN/BQN" /usr/local/bin/bqn
+          bqn -e '•Show "cbqn"'
+          git -C "$RUNNER_TEMP/CBQN" rev-parse HEAD
+      - name: BQN tests
+        run: |
+          set -eu
+          bqn mirror-bqn/test.bqn
+          bqn mirror-bqn/test_more.bqn
+
+  agda:
+    name: Agda
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Agda
+        run: |
+          set -eu
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y agda
+          agda --version
+      - name: Check Soyga
+        run: |
+          set -eu
+          cd soyga-agda
+          agda --safe --without-K Soyga.agda
+
+  julia:
+    name: Julia
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Julia 1.11.6
+        run: |
+          set -eu
+          curl -fsSL -o "$RUNNER_TEMP/julia.tar.gz" https://julialang-s3.julialang.org/bin/linux/x64/1.11/julia-1.11.6-linux-x86_64.tar.gz
+          sudo tar -xzf "$RUNNER_TEMP/julia.tar.gz" -C /opt
+          sudo ln -sfn /opt/julia-1.11.6/bin/julia /usr/local/bin/julia
+          julia --version
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y libpcre2-8-0
+      - name: Build the C clients the RPC tests spawn
+        run: |
+          set -eu
+          make -C abjad-wstp abjad-daemon abjad-client
+          make -C elliptic-neuroregex rpc-client
+          test -x abjad-wstp/abjad-daemon
+          test -x abjad-wstp/abjad-client
+          test -x elliptic-neuroregex/rpc-client
+      - name: Package tests
+        run: |
+          set -eu
+          julia --project=julia --startup-file=no -e 'using Pkg; Pkg.test("Algorithms")'

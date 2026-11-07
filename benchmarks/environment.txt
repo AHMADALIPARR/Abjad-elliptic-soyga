@@ -1,0 +1,10 @@
+utc 2026-11-07T21:02:42Z
+Linux cursor 6.12.113+ #1 SMP PREEMPT_DYNAMIC Thu Nov  5 16:04:51 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+model name	: Intel(R) Xeon(R) Processor
+nproc 4
+gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+julia version 1.11.6
+Agda version 2.6.3
+bqn "cbqn"
+no wolframscript
+no WolframKernel

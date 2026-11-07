@@ -1,0 +1,65 @@
+== abjad-wstp ==
+make: Entering directory '/workspace/abjad-wstp'
+sh tests/smoke.sh
+PASS: Arabic examples and invalid-input rejection
+./tests/suite
+abjad daemon: local backend, socket /tmp/abjad-suite-H1ho3C, timeout 5000ms, max requests 1024
+abjad daemon: local backend, socket /tmp/abjad-cap-4Nib8C, timeout 5000ms, max requests 2
+abjad daemon: local backend, socket /tmp/abjad-time-2vJzJ8, timeout 300ms, max requests 1024
+WSTP kernel startup failed
+abjad suite checks=924 failures=0
+make: Leaving directory '/workspace/abjad-wstp'
+== elliptic-neuroregex native ==
+make: Entering directory '/workspace/elliptic-neuroregex'
+cc -O2 -std=c11 -Wall -Wextra -Werror src/rpc_client.c -o rpc-client
+cc -O2 -std=c11 -Wall -Wextra -Werror tests/math_reference.c -o /tmp/elliptic-neuroregex-test
+/tmp/elliptic-neuroregex-test
+PASS: nine distinct E[3] abstract group elements; all 8 lines sum to identity
+cc -O2 -std=c11 -Wall -Wextra -Werror tests/native_suite.c src/native_math.c -o tests/native_suite
+./tests/native_suite
+elliptic native checks=26 failures=0
+make: Leaving directory '/workspace/elliptic-neuroregex'
+== mirror-bqn ==
+"All Dee Mirror BQN assertions passed"
+"BQN extended tests passed: 40"
+== soyga-agda ==
+== julia ==
+     Testing Algorithms
+      Status `/tmp/jl_UTuNfE/Project.toml`
+  [411e23c3] Algorithms v1.0.0 `/workspace/julia`
+  [de0858da] Printf v1.11.0
+  [6462fe0b] Sockets v1.11.0
+  [8dfed614] Test v1.11.0
+      Status `/tmp/jl_UTuNfE/Manifest.toml`
+  [411e23c3] Algorithms v1.0.0 `/workspace/julia`
+  [2a0f44e3] Base64 v1.11.0
+  [b77e0a4c] InteractiveUtils v1.11.0
+  [56ddb016] Logging v1.11.0
+  [d6f4376e] Markdown v1.11.0
+  [de0858da] Printf v1.11.0
+  [9a3f8284] Random v1.11.0
+  [ea8e919c] SHA v0.7.0
+  [9e88b42a] Serialization v1.11.0
+  [6462fe0b] Sockets v1.11.0
+  [8dfed614] Test v1.11.0
+  [4ec0a83e] Unicode v1.11.0
+Precompiling project for configuration --code-coverage=none --color=auto --check-bounds=yes --warn-overwrite=yes --depwarn=yes --inline=yes --startup-file=no --track-allocation=none...
+    714.4 ms  ✓ Algorithms
+  1 dependency successfully precompiled in 1 seconds. 8 already precompiled.
+     Testing Running tests...
+RPC error: 1
+Test Summary: | Pass  Total  Time
+JSON          |    9      9  0.9s
+Test Summary: | Pass  Total  Time
+Abjad exact   |  421    421  0.0s
+Test Summary:               | Pass  Total  Time
+Elliptic exact vs group law |  324    324  0.2s
+Test Summary:    | Pass  Total  Time
+Soyga recurrence |   45     45  0.4s
+Test Summary:        | Pass  Total  Time
+NeuroRegex semantics |   33     33  1.2s
+Test Summary:   | Pass  Total  Time
+RPC integration |   10     10  8.9s
+JULIA_TEST_FILE_DONE
+     Testing Algorithms tests passed 
+ALL_SUITES_OK

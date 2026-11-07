@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# SPDX-FileCopyrightText: 2026 The algorithm-cores project contributors
+*.agdai
+*.o
+abjad-wstp/abjad-daemon
+abjad-wstp/abjad-client
+abjad-wstp/abjad-daemon-wstp
+abjad-wstp/tests/suite
+abjad-wstp/tests/bench
+elliptic-neuroregex/rpc-client
+elliptic-neuroregex/wstp-daemon
+elliptic-neuroregex/tests/native_suite

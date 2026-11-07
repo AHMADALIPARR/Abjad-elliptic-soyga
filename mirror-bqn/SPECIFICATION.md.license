@@ -1,0 +1,8 @@
+SPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: 2026 The algorithm-cores project contributors
+
+Sidecar for mirror-bqn/SPECIFICATION.md.
+That file is byte-identical to originals/SPECIFICATION.md.
+An inline header would change the preserved design text, so the SPDX notice is here.
+The working-tree program that implements the design is AGPL-3.0-only.
+The provenance copy in originals/ is not edited.
