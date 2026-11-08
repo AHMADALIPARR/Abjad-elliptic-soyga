@@ -147,14 +147,6 @@ Project-owned source is **AGPL-3.0-only**: GNU Affero General Public License ver
 
 `originals/` and `uploads/` are the starter bytes. They arrived with no license and are not edited to apply this one. `originals/MANIFEST.sha256` checks those members.
 
-## Limits
-
-- Wolfram Language and WSTP were not run. `wolfram.c` and `wstp_daemon.c` still need the proprietary SDK.
-- Julia does not replace the C abjad decoder, BQN, or the Agda proof. It is a second abjad, the curve and search code that otherwise live in `NeuroRegex.wl`, and the socket server the C `rpc-client` can call.
-- Regex in Julia uses PCRE2 with match limit 100000 and depth limit 10000. That is not Wolfram `TimeConstrained`.
-- BQN `Magic` allows odd `n` from 1 to 401. `CurvePoints` allows primes up to 256. `Trace` fuel is at most 1024.
-- The C curve helper is int64 and returns an error on overflow. Julia uses `BigInt`.
-- This is not a cryptographic primitive and not a certification.
 
 ## Map
 
